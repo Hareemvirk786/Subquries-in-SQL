@@ -1,0 +1,65 @@
+# 🛒 Apex Retail: SQL Subquery Practice
+
+**Author: Javed Khizer Mohammad**
+
+## 📌 Project Overview
+This SQL practice project uses the `Apex_Retail` database to explore order sales and customer purchasing activity. It demonstrates scalar subqueries, aggregate functions, and membership filtering with `IN`.
+
+## 🎯 Objectives
+- Identify orders whose sales exceed the overall average order sales.
+- Display a sample of orders alongside the overall average.
+- Identify customers who have at least one recorded order.
+
+## 💻 SQL Queries
+
+### 1. Orders Above Average Sales
+```sql
+USE Apex_Retail;
+
+SELECT Order_ID, Total_Sales
+FROM Orders
+WHERE Total_Sales > (SELECT AVG(Total_Sales) FROM Orders);
+```
+The inner query calculates the average `Total_Sales` across all orders. The outer query returns orders with sales strictly above that average.
+
+### 2. Compare Sample Orders with the Overall Average
+```sql
+SELECT Order_ID, Total_Sales,
+       (SELECT AVG(Total_Sales) FROM Orders) AS OverallAvg
+FROM Orders
+LIMIT 5;
+```
+The scalar subquery supplies the same overall average for each returned row, making individual order values easy to compare with the benchmark. `LIMIT 5` returns up to five rows; without `ORDER BY`, which rows appear is not guaranteed.
+
+### 3. Customers with Recorded Orders
+```sql
+SELECT Customer_ID, Customer_Name
+FROM Customers
+WHERE Customer_ID IN (SELECT Customer_ID FROM Orders);
+```
+The subquery supplies customer IDs from the orders table. The outer query returns matching customer records. Repeated customer IDs in `Orders` do not multiply the returned customer rows.
+
+## 🧠 Skills Demonstrated
+- Scalar subqueries in `WHERE` and `SELECT`
+- Aggregation with `AVG()`
+- Membership filtering with `IN`
+- Column aliases with `AS`
+- Limiting result sets
+- Interpreting relationships between customers and orders
+
+## 🚀 How to Use
+Run the queries in a MySQL-compatible environment with the existing `Apex_Retail` database. Required columns:
+
+| Table | Columns |
+| --- | --- |
+| Orders | Order_ID, Total_Sales, Customer_ID |
+| Customers | Customer_ID, Customer_Name |
+
+Table names are written consistently as `Orders`, since case sensitivity can vary by environment.
+
+## 📊 Analytical Value
+These queries provide a starting point for identifying higher-value orders and customers with purchasing activity. They demonstrate query logic; no dataset, execution results, or measured business findings are included here.
+
+## 🌱 Learning Reflection
+This exercise strengthens my ability to translate retail questions into SQL queries and apply mathematical reasoning to data analysis.
+
